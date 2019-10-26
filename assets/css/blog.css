@@ -1,0 +1,87 @@
+:root {
+    --bgcolor: #1c1c1c;
+    --textcolor: #c4c4c4;
+}
+
+body {
+  background-color: var(--bgcolor);
+  color: var(--textcolor);
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+}
+
+a:link {
+    color: var(--textcolor);
+}
+
+a:visited {
+    color: var(--textcolor);
+}
+
+.blog-header {
+    position: fixed;
+    text-align: center;
+    display: flex;
+}
+
+.blog-header i {
+    font-size: 200%;
+    padding: 1rem;
+    transition: .2s ease-in-out;
+}
+
+.blog-header a {
+    text-decoration-line: none;
+}
+
+.blog-header i:hover {
+    transform: scale(1.5);
+}
+
+.card-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.card-list hr.rounded {
+    border-top: 2px solid var(--textcolor);
+    border-radius: 5px;
+    width: 50%;
+}
+
+
+.card {
+    transition: 0.3s;
+    width: 100%;
+}
+
+.card:hover {
+    background-color: rgb(43, 42, 42);
+}
+
+.card .title {
+    font-size: 200%;
+}
+
+.card .text {
+    font-size: 150%;
+    padding-bottom: 0.5rem;
+}
+
+.card .date {
+    padding-bottom: 1rem;
+    font-size: 120%;
+    color: #948e8e;
+}
+
+::selection {
+    color: var(--bgcolor);
+    background-color: var(--textcolor);
+}
+
+::-moz-selection {
+    color: var(--bgcolor);
+    background-color: var(--textcolor);
+}

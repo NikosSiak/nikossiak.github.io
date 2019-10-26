@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Nick Siakas</title>
+    <link rel="stylesheet" href="assets/css/styles.css" />
+    <link rel="stylesheet" href="assets/css/all.css" />
+</head>
+
+<body>
+    <div class="shell">
+        <span class="red">nick@siakas</span>:<span class="blue">~</span>#
+        <span class="typer" id="shell_typer"
+            data-words="student @ university of west attica, c/c++ and python developer, reverse engineering enthusiast"
+            data-delay="80" data-deleteDelay="1000" data-colors="#e6dada"></span><span class="cursor"
+            data-owner="shell_typer"></span>
+        <script src="assets/js/typer.js"></script>
+    </div>
+    <div class="links">
+        <a href="https://github.com/NikosSiak" title="Github"><i class="fab fa-github circle"></i></a>
+        <a href="https://www.linkedin.com/in/nick-siakas-184081194/" title="LinkedIn"><i
+                class="fab fa-linkedin-in circle"></i></a>
+        <a href="mailto:nikos.siakas@gmail.com" title="Email me"><i class="far fa-envelope circle"></i></a>
+        <a href="blog.html" title="Blog"><i class="fas fa-blog circle"></i></a>
+        <!-- <a href="cv.html" title="CV"><i class="far fa-file-alt circle"></i></i></a> -->
+    </div>
+</body>
+
+<!-- a bug on chrome is firing the scale of the links on load, 
+        an empty script tag in the footer solves the problem -->
+<footer>
+    <script> </script>
+</footer>
+
+</html>

@@ -1,0 +1,103 @@
+.post {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* font-size: 125%; */
+}
+
+.post-title {
+    position: relative;
+    text-align: center;
+    width: 70%;
+    background-color: rgba(242,182,56,0.8) !important;
+}
+
+.post-title .centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.5vw;
+    color: white !important;
+    /* text-shadow: -1px 0 #1c1c1c, 0 1px #1c1c1c, 1px 0 #1c1c1c, 0 -1px #1c1c1c; */
+}
+
+.post-title .date {
+    color: #948e8e;
+    font-size: 1vw;
+}
+
+.post .text {
+    width: 50vw;
+    text-align: left;
+    line-height: 150%;
+}
+
+li {
+    padding-bottom: 1rem;
+}
+
+hr {
+    /* border-top: 2px solid #202020;
+    width: 25%; */
+    margin-bottom: 4em;
+    max-width: 25%;
+    border: 0.1em solid rgba(255, 255, 255, 0.1);
+}
+
+.code-link {
+    padding: 1rem 1rem 1rem 5rem;
+    background: rgba(255, 255, 255, 0.1) !important;
+    font-size: 0.90em;
+    position: relative;
+    /* display: block; */
+    /* height: 100%; */
+    display: flex;
+}
+
+.code-link i {
+    background-color: rgba(242,182,56,0.8) !important;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 100%;
+    width: 4rem;
+    display: flex;
+    /* text-align: center; */
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5em;
+    color: white;
+}
+
+.code {
+    display: inline;
+    color: rgba(242,182,56,0.8) !important;
+    font-family: monospace;
+    /* border: #948e8e; */
+    border: 0.05em solid rgba(255, 255, 255, 0.192) !important;
+    /* border-style: solid; */
+    border-radius: 5px;
+    padding: 4px;
+}
+
+@media only screen and (max-width: 1200px) {
+    .post .text {
+        width: 80%;
+    }
+
+    .post-title {
+        width: 100%;
+    }
+
+    .post-title .centered {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 2vw;
+        color: white !important;
+        /* text-shadow: -1px 0 #1c1c1c, 0 1px #1c1c1c, 1px 0 #1c1c1c, 0 -1px #1c1c1c; */
+    }
+}

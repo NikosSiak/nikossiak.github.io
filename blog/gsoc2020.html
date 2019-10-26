@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Save state manager for RetroPlayer</title>
+    <link rel="stylesheet" href="../assets/css/blog.css" />
+    <link rel="stylesheet" href="../assets/css/blog-gsoc2020.css" />
+    <link rel="stylesheet" href="../assets/css/all.css" />
+</head>
+
+<body>
+    <div class="blog-header" style="position: relative;">
+        <a href="../blog.html">
+            <h2>Nick Siakas</h2>
+        </a>
+        <a href="https://github.com/NikosSiak" title="GitHub"><i class="fab fa-github"></i></a>
+        <a href="https://www.linkedin.com/in/nick-siakas-184081194/" title="LinkedIn"><i
+                class="fab fa-linkedin-in"></i></a>
+        <a href="mailto:nikos.siakas@gmail.com" title="Email me"><i class="far fa-envelope"></i></a>
+        <!-- <a href="cv.html" title="CV"><i class="far fa-file-alt"></i></a> -->
+    </div>
+
+    <div class="post">
+        <div class="post-title">
+            <img src="../assets/images/GSoC-icon.svg" width="30%">
+            <div class="centered">
+                <h1><b>Save state manager for RetroPlayer -<br>GSoC 2020</b></h1>
+                <div class="date">20/8/2020</div>
+            </div>
+        </div>
+
+        <div class="text">
+            <h2>Introduction</h2>
+            <p>
+                RetroPlayer is a new player core for Kodi Entertainment Center. It is similar to the video and audio players, but it
+                plays games instead of movies and music. 
+            </p>
+                
+            <p>
+                Kodi excels at managing large movie, music, and (with add-ons) game libraries. 
+                However, save states are simply stored next to the ROM or in a hard-coded folder.
+                My project for the summer of 2020 was to create a save state manager for RetroPlayer.
+                As a stretch goal, I had to implement automatic saved game captioning that gives saves a description
+                of what the player is currently doing in their game.
+            </p>
+            
+            <p>
+                You can find my work in the following links:
+            </p>
+
+            <div class="code-link">
+                <i class="fas fa-info-circle"></i>
+                <a href="https://forum.kodi.tv/showthread.php?tid=356366" target="_blank">
+                    Forum post about test builds
+                </a>
+            </div>
+            
+            <br>
+
+            <div class="code-link">
+                <i class="fas fa-code"></i>
+                <a href="https://github.com/garbear/xbmc/pull/120" target="_blank">
+                    Kodi Pull request
+                </a>
+            </div>
+
+            <br>
+            
+            <div class="code-link">
+                <i class="fas fa-code"></i>
+                <a href="https://github.com/kodi-game/game.libretro/pull/67" target="_blank">
+                    game.libretro Pull request 
+                </a>
+            </div>
+
+            <hr>
+
+            <h2>Challenges</h2>
+            <ul>
+                <li>
+                    The biggest challenge I faced was building Kodi addons because I didn't know how to use cmake.
+                </li>
+                <li>
+                    The save state's thumbnail also got me stuck for a few days, more on this later.
+                </li>
+                <li>
+                    Another big challenge was that I had to modify existing code that I had never seen before.
+                </li>
+            </ul>
+
+            <hr>
+
+            <h2>Work</h2>
+            <h3>Save state Manager</h3>
+            <p>
+                I started by replacing the current dialog that was displaying when the user selected a rom, that was
+                asking to select the game client that you want to use and deleted your save when you selected a
+                different
+                game client than the one which created the save state, with a dialog that displays all the saves from the
+                selected game and extracted the game client's id from the selected save.
+            </p>
+            <p>
+                Next I had to change how save states were saved, because the current way saved them next to the rom with
+                the same name.
+                In a conversation I had with Nick Renieris (velocity), my mentor, we decided not to use a database for
+                the save states but use the filesystem to organize them. Now when the user launches a new game (rom) a
+                subfolder with the rom's name will be created in a subfolder for saves in Kodi's home folder.
+            </p>
+            <p>
+                At this point I had a working demo next step was to save the games current frame to use it as a
+                thumbnail in the manager. This was the first challenge I faced, my first implementation took me about a week and it seemed to be 
+                working but then I found out it was working only with specific game clients, those that are using 
+                <span class="code">AV_PIX_FMT_BGR0</span> pixel format. Thankfully velocity came in with a solution to change the output 
+                pixel format in the ffmpeg <span class="code">SwsContext</span> when we scale the image.
+            </p>
+
+            <div class="code-link">
+                <i class="fas fa-code"></i>
+                <a href="https://github.com/NikosSiak/xbmc/commit/800ef45e7f0dd7caa3ab7dce7aefe165ea39819c" target="_blank">
+                    Pictures: ScaleImage changes
+                </a>
+            </div>
+
+            <p>
+                The last week of June the manager looked like this (I was using the dialog for the game clients):
+            </p>
+
+            <div style="text-align: center;">
+                <img src="images/savestate_manager_before.png" width="70%">
+            </div>
+
+            <p>
+                The next step was to change the UI. Here is how the dialog looks now:
+            </p>
+
+            <div style="text-align: center;">
+                <img src="images/savestate_manager.jpg" alt="RetroPlayer Save state manager" width="70%">
+            </div>
+
+            <h3>In-game save state manager</h3>
+
+            <p>
+                While I was working on the save state manager I had a talk with Garrett about creating an in-game manager 
+                that looks like the video filter dialog. When I woke up the next day I found a branch whith the UI for
+                the in-game manager ready from Garrett. Now I had to populate the item list with the save states for the game
+                and load a save state when you click on it.
+            </p>
+
+            <div style="text-align: center;">
+                <img src="images/in_game_savestate_manager.png" alt="RetroPlayer in-game save state manager" width="70%">
+            </div>
+
+            <h3>Save state auto-captioning</h3>
+
+            <p>
+                To generate captions for save states I used the <a href="http://retroachievements.org/" target="_blank">RetroAchievements</a> API, 
+                which besides achievements also returns a rich presence script. To generate the caption from the script I used 
+                RetroAchievements <a href="https://github.com/RetroAchievements/rcheevos" target="_blank">rcheevos</a> library. Here is where 
+                I faced my biggest challenge of the summer, building <span class="code">game.libretro</span>
+            </p>
+
+            <p>
+                I started by adding rcheevos as a dependency to game.libretro, then I had to implement the environment callback
+                <span class="code">RETRO_ENVIRONMENT_SET_MEMORY_MAPS</span>,
+                which is called from the game client code but wasn't doing anything until now, this was needed to calculate the real
+                address from the offsets that RetroAchievements returns.
+            </p>
+
+            <div class="code-link">
+                <i class="fas fa-code"></i>
+                <a href="https://github.com/NikosSiak/game.libretro/commit/29d6ef875f97cbc7943e658ccd6241006a9a14ad" target="_blank">
+                    game.libretro: Set memory maps
+                </a>
+            </div>
+
+            <p>
+                To evaluate the rich presence string you have to implement a callback function with the signature:
+                <div style="text-align: center;">
+                <div class="code">typedef unsigned (*rc_peek_t)(unsigned address, unsigned num_bytes, void* ud);</div>
+                </div>
+                which is used to read from the emulated system's memory. At first I was implementing this (and the whole code that dealt with rcheevos) 
+                in Kodi's codebase, but it was reading invalid memory. After a lot of debugging on Kodi and 
+                <a href="https://www.retroarch.com/" target="_blank">RetroArch</a> I figured out that this code should go in 
+                <span class="code">game.libretro</span> codebase.
+            </p>
+
+            <div class="code-link">
+                <i class="fas fa-code"></i>
+                <a href="https://github.com/NikosSiak/game.libretro/commit/a2cc542acdc4aeb60824830f493104fe298718a9"
+                    target="_blank">
+                    game.libretro: Evaluate rich presence
+                </a>
+            </div>
+            
+            <p> 
+                Next I had to add a way for the user to login to their RetroAchievements account, because that is needed in order to get 
+                the game data from the API.
+                
+                <div style="text-align: center;">
+                    <img src="images/retroachievements_login.jpg" alt="Kodi settings login to RetroAchievements" width="70%">
+                </div>
+
+                Finally I had to display the evaluation to the user. For now I just used the save state manager's label field.
+
+                <div style="text-align: center;">
+                    <img src="images/savestate-manager_with_rp.jpg" alt="RetroPlayer Save state manager" width="70%">
+                </div>
+
+                The rich presence evaluation is also displayed to RetroAchievements.
+                
+                <div style="text-align: center;">
+                    <img src="images/retroachievements_rp.jpg" alt="Kodi settings login to RetroAchievements" width="70%">
+                </div>
+            </p>
+
+            <hr>
+
+            <h2>Bugs</h2>
+
+            <p>
+                <ul>
+                    <li>
+                        The save state manager sometimes caches the save's thumbnail despite the fact that the thumbnail has been
+                        overwritten and displays the previous one.
+                    </li>
+                    <li>
+                        Because the save states are saved using <a href="https://google.github.io/flatbuffers/" target="_blank">flatbuffers</a> and 
+                        they are read-only, so to rename a save state I had to copy the whole file and overwrite the old one, this means that when 
+                        the manager sorts the saves it will place this save first.
+                    </li>
+                </ul>
+            </p>
+
+            <hr>
+
+            <h2>Future Work</h2>
+            <h3>Important</h3>
+            <p>
+                <ul>
+                    <li>
+                        Garrett Brown released my save state manager for testers so I would be fixing any bugs they find for
+                        the next months.
+                    </li>
+                    <li>
+                        A new way to display the rich presence evaluation is needed.
+                    </li>
+                </ul>
+            </p>
+            <h3>Nice-to-have</h3>
+            <p>
+                <ul>
+                    <li>
+                        Since we have the rich presence data a nice feature that I want to implement is to display that text to
+                        discord.
+                    </li>
+                </ul>
+            </p>
+            <hr>
+
+            <h2>Acknowledgements</h2>
+            <p>
+                I'd like to thank:
+            <ul>
+                <li>
+                    My mentors, Nick Renieris (velocity) and Kostas Andrianos (gusandrianos), for not only giving me the
+                    opportunity to work with them on Kodi but also for answering me every question I had.
+                </li>
+                <li>
+                    Garrett Brown (garbear) for helping me when I was stuck with the auto-captioning feature even
+                    thought he had his own students to mentor.
+                </li>
+            </ul>
+            </p>
+
+            <hr>
+
+            <h2>Closing thoughts</h2>
+            <p>
+                This was the first time that I contribute to an open-source software. I can say that this experience was awesome, 
+                I've learned a ton in just 3 months.
+                I really liked the project and it's safe to say I will continue to contribute to Kodi.
+            </p>
+
+            <hr>
+
+        </div>
+    </div>
+
+    <!-- a bug on chrome is firing the scale of the links on load, 
+                an empty script tag in the footer solves the problem -->
+    <footer>
+        <script> </script>
+    </footer>
+</body>
+
+</html>

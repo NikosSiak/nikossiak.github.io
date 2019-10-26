@@ -1,0 +1,96 @@
+body {
+  background-color: #1c1c1c;
+}
+
+a:link {
+    color: white;
+}
+
+a:visited {
+    color: white;
+}
+
+a {
+    padding: 2%;
+}
+
+i {
+    font-size: 300%;
+    transition: .2s ease-in-out;
+}
+
+i:hover {
+    transform: scale(1.5);
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    15% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.links {
+    text-align: center;
+    position: fixed;
+    opacity: 1;
+    top: 65%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+}
+
+.links a:nth-child(1) {
+    animation: fadeIn 2s ease-in;
+}
+
+.links a:nth-child(2) {
+    animation: fadeIn 2.25s ease-in;
+}
+
+.links a:nth-child(3) {
+    animation: fadeIn 2.5s ease-in;
+}
+
+.links a:nth-child(4) {
+    animation: fadeIn 2.75s ease-in;
+}
+
+.links a:nth-child(5) {
+    animation: fadeIn 3s ease-in;
+}
+
+.circle {
+    border: 1px solid white;
+    border-radius: 100%;
+    padding: 20px;
+    border-radius: 50%;
+}
+
+.circle:hover {
+    background-color: rgb(43, 42, 42);
+}
+
+.shell {
+    font-family: monospace;
+    text-align: center;
+    font-size: 300%;
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -40%);
+    color: #e6dada;
+}
+
+.shell .red {
+    color: #e62828;
+}
+
+.shell .blue {
+    color: #6193c9;
+}
