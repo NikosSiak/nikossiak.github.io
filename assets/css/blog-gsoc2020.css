@@ -76,7 +76,7 @@ hr {
     color: rgba(242,182,56,0.8) !important;
     font-family: monospace;
     /* border: #948e8e; */
-    border: 0.05em solid rgba(255, 255, 255, 0.192) !important;
+    border: 0.1em solid rgba(255, 255, 255, 0.192) !important;
     /* border-style: solid; */
     border-radius: 5px;
     padding: 4px;
